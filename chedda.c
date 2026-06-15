@@ -3,6 +3,9 @@
 //by charlie - https://charliemakesthings.com/
 //code - https://github.com/charlie-makes-things/C_cheddaboards
 //
+//cheddaboards can be found here https://cheddaboards.com/ 
+//and here https://github.com/cheddatech/CheddaBoards-Godot 
+//
 //uses the libcurl library to communicate with the cheddaboards server
 //to compile, try 'gcc chedda.c -o chedda -lcurl' then './chedda'
 //
