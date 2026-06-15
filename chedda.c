@@ -17,8 +17,8 @@
 //below
 
 //set these to you api key and game id.
-const char *chedda_API_key = "your_api_key_goes_here";
-const char *chedda_game_ID = "your_game_id_goes_here";
+const char *g_chedda_API_key = "your_api_key_goes_here";
+const char *g_chedda_game_ID = "your_game_id_goes_here";
 
 
 #include <stdio.h>
@@ -114,7 +114,7 @@ void chedda_user_free(cheddaUser *user){
 
 //get scores:
 //	-WARNING! 	- no error checking! Make sure you have correctly set the
-//							- chedda_API_key and chedda_game_ID variables.
+//							- g_chedda_API_key and g_chedda_game_ID variables.
 //							- you will need to free returnData yourself				
 //			
 //	-boardID 	- the name of your scoreboard as set on the cheddaboards website.
@@ -134,14 +134,14 @@ int chedda_get_scores( char *boardID, int count, char **returnData){
  
   char apiString[128];
   strcpy(apiString,"X-API-Key: ");
-  strcat(apiString,chedda_API_key);
+  strcat(apiString,g_chedda_API_key);
 
   char cnt[4];
   snprintf(cnt,4,"%d",count);
 
   char urlString[1024];
   strcpy(urlString,"https://api.cheddaboards.com/games/");
-  strcat(urlString,chedda_game_ID);
+  strcat(urlString,g_chedda_game_ID);
   strcat(urlString,"/scoreboards/");
   strcat(urlString,boardID);
   strcat(urlString,"\?sort=score&limit=");
@@ -180,7 +180,7 @@ int chedda_get_scores( char *boardID, int count, char **returnData){
 
 //set scores:
 //	-WARNING! 	- no error checking! Make sur eyou have correctly set the
-//							- chedda_API_key and chedda_game_ID variables.
+//							- g_chedda_API_key and g_chedda_game_ID variables.
 //							- you will need to free returnData yourself				
 //			
 //	-user		- a cheddaUser struct with name and UID set.
@@ -200,11 +200,11 @@ int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnDat
 
 	char apiString[128];
   	strcpy(apiString,"X-API-Key: ");
-  	strcat(apiString,chedda_API_key);
+  	strcat(apiString,g_chedda_API_key);
 
   	char gameIDString[128];
   	strcpy(gameIDString,"X-Game-ID: ");
-  	strcat(gameIDString,chedda_game_ID);
+  	strcat(gameIDString,g_chedda_game_ID);
 
   	char scoreStr[25];
   	snprintf(scoreStr,25,"%ld",score);
@@ -216,7 +216,7 @@ int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnDat
 		strcpy(postString,"{\"playerId\": \"");
 		strcat(postString,user->UID);
 		strcat(postString,"\", \"gameId\": \"");
-		strcat(postString,chedda_game_ID);
+		strcat(postString,g_chedda_game_ID);
 		strcat(postString,"\", \"nickname\": \"");
 		strcat(postString,user->nickname);
 		strcat(postString,"\", \"score\": ");
@@ -227,7 +227,7 @@ int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnDat
 
 		slist1 = NULL;
 		slist1 = curl_slist_append(slist1, apiString);
-		slist1 = curl_slist_append(slist1, chedda_game_ID);
+		slist1 = curl_slist_append(slist1, g_chedda_game_ID);
 		slist1 = curl_slist_append(slist1, "Content-Type: application/json");
 
 		hnd = curl_easy_init();
