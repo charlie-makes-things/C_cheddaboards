@@ -148,7 +148,7 @@ int chedda_get_scores( char *boardID, int count, char **returnData){
   strcat(urlString,cnt);
 
   slist1 = NULL;
-  slist1 = curl_slist_append(slist1, "X-API-Key: cb_sos_109755744");
+  slist1 = curl_slist_append(slist1, apiString);
 
   hnd = curl_easy_init();
   curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
