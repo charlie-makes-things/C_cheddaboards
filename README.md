@@ -5,7 +5,7 @@ a simple example for communicating with cheddabords using C - see https://chedda
 
 Basic usage:
 
-1: create and account and set up a game and boards over at https://cheddaboards.com/
+1: create and account and set up a game and boards over at https://cheddaboards.com/ and have a read of the REST api docs here: https://github.com/cheddatech/CheddaBoards-Godot/blob/main/docs/quickstart-api.md
 
 2: copy and paste your API Key and game id into the chedda_API_key and chedda_game_ID strings in chedda.c
 
