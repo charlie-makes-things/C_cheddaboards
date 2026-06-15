@@ -1,5 +1,5 @@
 # C_cheddaboards
-a simple example for communicating with cheddabords - see https://cheddaboards.com/ and https://github.com/cheddatech/CheddaBoards-Godot for more info.
+a simple example for communicating with cheddabords using C - see https://cheddaboards.com/ and https://github.com/cheddatech/CheddaBoards-Godot for more info.
 
 # How To:
 
