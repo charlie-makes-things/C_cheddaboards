@@ -1,5 +1,7 @@
 //simple C interface for using the cheddaboards web API to set and get
 //scores.
+//by charlie - https://charliemakesthings.com/
+//code - https://github.com/charlie-makes-things/C_cheddaboards
 //
 //uses the libcurl library to communicate with the cheddaboards server
 //to compile, try 'gcc chedda.c -o chedda -lcurl' then './chedda'
