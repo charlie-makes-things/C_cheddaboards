@@ -35,15 +35,13 @@ typedef struct cheddaUser{
 	char *nickname;
 }cheddaUser;
 
-//struct to contain deta from chedda boards
+//temp struct to contain data from chedda boards. used internally
 struct __chedda_response {
   char *memory;
   size_t size;
 };
 
-
-
-//callback function to write recieved data
+//callback function to write recieved data. used internally
 static size_t __chedda_response_cb(void *contents, size_t size, size_t nmemb, void *userp)
 {
   size_t realsize = size * nmemb;
@@ -64,9 +62,9 @@ static size_t __chedda_response_cb(void *contents, size_t size, size_t nmemb, vo
   return realsize;
 }
 
-//generate a new user id. you are responsible for freeing this memory
+//generate a new user id. you are responsible for freeing this memory.
 //this function is used by chedda_create_user and chedda_create_existing_user
-//so you likely won need to use this function directly
+//so you likely won't need to use this function directly
 char *__chedda_create_UID(){
 		//unix timestamp
 		time_t ltime;
@@ -117,13 +115,13 @@ void chedda_user_free(cheddaUser *user){
 //							- g_chedda_API_key and g_chedda_game_ID variables.
 //							- you will need to free returnData yourself				
 //			
-//	-boardID 	- the name of your scoreboard as set on the cheddaboards website.
-//  -count		- the number of entries to recieve
+//	-boardID 		- the name of your scoreboard as set on the cheddaboards website.
+//  -count			- the number of entries to recieve
 //  -returnData - a char buffer set to NULL. If the function is successful
-//				  this will contain the response from cheddaboards.
+//				  			this will contain the response from cheddaboards.
 //
-//  returns - an int code provided by libcurl. see: https://curl.se/libcurl/c/libcurl-errors.html
-//			  you should be testing for CURLE_OK before using the data set in the returnData param
+//  returns 		- an int code provided by libcurl. see: https://curl.se/libcurl/c/libcurl-errors.html
+//			  				you should be testing for CURLE_OK before using the data set in the returnData param
 int chedda_get_scores( char *boardID, int count, char **returnData){
 
   CURLcode ret;
@@ -179,18 +177,18 @@ int chedda_get_scores( char *boardID, int count, char **returnData){
 
 
 //set scores:
-//	-WARNING! 	- no error checking! Make sur eyou have correctly set the
+//	-WARNING! 	- no error checking! Make sure you have correctly set the
 //							- g_chedda_API_key and g_chedda_game_ID variables.
 //							- you will need to free returnData yourself				
 //			
-//	-user		- a cheddaUser struct with name and UID set.
-//  -score		- the score to set
-//	-streak		- the streak to set
+//	-user				- a cheddaUser struct with name and UID set.
+//  -score			- the score to set
+//	-streak			- the streak to set
 //  -returnData - a char buffer set to NULL. If the function is successful
-//				  this will contain the response from cheddaboards.
+//				  			this will contain the response from cheddaboards.
 //
-//  returns - an int code provided by libcurl. see: https://curl.se/libcurl/c/libcurl-errors.html
-//			  you should be testing for CURLE_OK before using the data set in the returnData param
+//  returns 		- an int code provided by libcurl. see: https://curl.se/libcurl/c/libcurl-errors.html
+//			  				you should be testing for CURLE_OK before using the data set in the returnData param
 int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnData){
 	CURLcode ret;
 	CURL *hnd;
@@ -274,7 +272,8 @@ int main(int argc, char *argv[])
 	
 	//or...	
 	//if you have loaded the user details from a save file, use this function
-	//to create the cheddaUser struct
+	//to create the cheddaUser struct from the existing data
+
 	// char *your_loaded_uid="dev_1781519789_4d6e35f6";
 	// char *your_loaded_nickname="Mr. Horse";
 	// cheddaUser *user=chedda_create_existing_user(your_loaded_uid,your_loaded_nickname);
@@ -283,7 +282,7 @@ int main(int argc, char *argv[])
 	
 	
 	//boardName should match the name of the board you entered on cheddaboards
-	//e.g. daily, weekly, all time etc.
+	//e.g. daily, weekly, all-time etc.
 	char *boardName="flippyflip";
 	char *data=NULL;	
 	//send a request for scores on the board boardName. 	
