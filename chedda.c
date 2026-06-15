@@ -113,9 +113,9 @@ void chedda_user_free(cheddaUser *user){
 
 
 //get scores:
-//	-WARNING! 	- no error checking! Make sur eyou have correctly set the
-//				- chedda_API_key and chedda_game_ID variables.
-//				- you will need to free returnData yourself				
+//	-WARNING! 	- no error checking! Make sure you have correctly set the
+//							- chedda_API_key and chedda_game_ID variables.
+//							- you will need to free returnData yourself				
 //			
 //	-boardID 	- the name of your scoreboard as set on the cheddaboards website.
 //  -count		- the number of entries to recieve
@@ -180,8 +180,8 @@ int chedda_get_scores( char *boardID, int count, char **returnData){
 
 //set scores:
 //	-WARNING! 	- no error checking! Make sur eyou have correctly set the
-//				- chedda_API_key and chedda_game_ID variables.
-//				- you will need to free returnData yourself				
+//							- chedda_API_key and chedda_game_ID variables.
+//							- you will need to free returnData yourself				
 //			
 //	-user		- a cheddaUser struct with name and UID set.
 //  -score		- the score to set
