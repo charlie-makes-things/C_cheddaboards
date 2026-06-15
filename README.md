@@ -17,7 +17,7 @@ Basic usage:
 
 # Example
 
-See the main() function in chedda.c for a usage example. If you have libcurl installed you can use the include buildrun.sh script to compile and execute the example. You will likely need to use 'chmod +x buildrun.sh' first.
+See the main() function in chedda.c for a usage example. If you have libcurl installed you can use the included buildrun.sh script to compile and execute the example. You will likely need to use 'chmod +x buildrun.sh' first.
 
 # License
 
