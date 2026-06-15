@@ -25,6 +25,6 @@ This is provided for free with no license, do with it as you wish though it woul
 
 # Notes
 
-This is a pretty barebone example but it does work. I have no plans to expand the code beyond what is here, though if you expand it I'd be happy to include our additions here.
+This is a pretty barebones example but it does work. I have no plans to expand the code beyond what is here, though if you expand it I'd be happy to include our additions here.
 
 libcurl functions can take a long time to complete, so you will likely want to call the chedda_get_scores() and chedda_submit_score() functions from their own threads. This is beyond the scope of this example.
