@@ -1,24 +1,3 @@
-//simple C interface for using the cheddaboards web API to set and get
-//scores.
-//by charlie - https://charliemakesthings.com/
-//code - https://github.com/charlie-makes-things/C_cheddaboards
-//
-//cheddaboards can be found here https://cheddaboards.com/ 
-//and here https://github.com/cheddatech/CheddaBoards-Godot 
-//
-//uses the libcurl library to communicate with the cheddaboards server
-//to compile, try 'gcc chedda.c -o chedda -lcurl' then './chedda'
-//
-//note that you will need to call these functions from a separate thread
-//in your game or the program will pause while it awaits a response from the
-//server. This is beyond the scope of this example.
-//
-//make sure to enter your API key and game name in the variables immediately
-//below
-
-//set these to you api key and game id.
-const char *g_chedda_API_key = "your_api_key_goes_here";
-const char *g_chedda_game_ID = "your_game_id_goes_here";
 
 
 #include <stdio.h>
@@ -27,6 +6,47 @@ const char *g_chedda_game_ID = "your_game_id_goes_here";
 #include <time.h>
 #include <stdlib.h>
 #include <limits.h>
+
+char *g_chedda_API_key=NULL;
+char *g_chedda_game_ID=NULL;
+
+extern int chedda_init(char *api_key,char* game_id);
+extern int chedda_free();
+
+extern void *chedda_create_user(char *nickname);
+extern void *chedda_create_existing_user(char *UID,char *nickname);
+extern void chedda_user_free(void *user);
+
+extern int chedda_get_scores( char *boardID, int count, char **returnData);
+extern int chedda_submit_score_global(void *user,long score, int streak,char **returnData);
+extern int chedda_submit_score_targeted(void *user,char *boardID,long score, int streak,char **returnData);
+
+extern int chedda_init(char *api_key,char *game_id){
+	
+	int apilen=strlen(api_key);
+	int gidlen=strlen(game_id);
+	
+	g_chedda_game_ID=NULL;
+	g_chedda_API_key=NULL;
+	
+	g_chedda_game_ID=(char*)malloc(sizeof(char)*gidlen);
+	g_chedda_API_key=(char*)malloc(sizeof(char)*apilen);
+	
+	strcpy(g_chedda_game_ID,game_id);
+	strcpy(g_chedda_API_key,api_key);
+	
+	return 0;
+}
+
+extern int chedda_free(){
+	if(g_chedda_game_ID!=NULL){
+		free(g_chedda_game_ID);
+	}
+	if(g_chedda_API_key!=NULL){
+		free(g_chedda_API_key);
+	}
+	return 0;
+}
 
 
 //user id struct
@@ -80,35 +100,42 @@ char *__chedda_create_UID(){
 
 //create a new cheddaboards user. 
 //you are responsible for freeing memory created by this function
-cheddaUser *chedda_create_user(char *nickname){
+void *chedda_create_user(char *nickname){
 	cheddaUser *user=(cheddaUser*)malloc(sizeof(cheddaUser));
 	user->UID=__chedda_create_UID();
 	user->nickname=(char*)malloc(sizeof(char)*strlen(nickname));
 	strcpy(user->nickname,nickname);
-	return user;
+	return (void*)user;
 }
 
 //create a user from existing data - for example user data read from a savefile
 //you are responsible for freeing memory created by this function
-cheddaUser *chedda_create_existing_user(char *UID,char *nickname){
+void *chedda_create_existing_user(char *UID,char *nickname){
 	cheddaUser *user=(cheddaUser*)malloc(sizeof(cheddaUser));
 	user->UID=(char*)malloc(sizeof(char)*strlen(UID));
 	strcpy(user->UID,UID);
 	user->nickname=(char*)malloc(sizeof(char)*strlen(nickname));
 	strcpy(user->nickname,nickname);
-	return user;
+	return (void*)user;
 }
 
 //free a chedda user struct created by chedda_create_user() 
 //or chedda_create_existing_user()
-void chedda_user_free(cheddaUser *user){
-	free(user->UID);
-	free(user->nickname);
-	free(user);
+void chedda_user_free(void *user){
+	struct cheddaUser *use=(struct cheddaUser*)user;
+	free(use->UID);
+	free(use->nickname);
+	free(use);
 }
 
 
+extern char *chedda_get_user_id(void *user){
 
+}
+
+extern char *chedda_get_user_nickname(void *user){
+
+}
 
 //get scores:
 //	-WARNING! 	- no error checking! Make sure you have correctly set the
@@ -189,7 +216,10 @@ int chedda_get_scores( char *boardID, int count, char **returnData){
 //
 //  returns 		- an int code provided by libcurl. see: https://curl.se/libcurl/c/libcurl-errors.html
 //			  				you should be testing for CURLE_OK before using the data set in the returnData param
-int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnData){
+int chedda_submit_score_global(void *user,long score, int streak,char **returnData){
+	
+	struct cheddaUser *usr=(struct cheddaUser*)user;
+
 	CURLcode ret;
 	CURL *hnd;
 	struct __chedda_response chunk = {.memory = malloc(0),
@@ -212,11 +242,11 @@ int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnDat
 
   	char *postString=(char*)malloc(sizeof(char)*2048);;
 		strcpy(postString,"{\"playerId\": \"");
-		strcat(postString,user->UID);
+		strcat(postString,usr->UID);
 		strcat(postString,"\", \"gameId\": \"");
 		strcat(postString,g_chedda_game_ID);
 		strcat(postString,"\", \"nickname\": \"");
-		strcat(postString,user->nickname);
+		strcat(postString,usr->nickname);
 		strcat(postString,"\", \"score\": ");
 		strcat(postString,scoreStr);
 		strcat(postString,", \"streak\": ");
@@ -259,68 +289,92 @@ int chedda_submit_score(cheddaUser *user,long score, int streak,char **returnDat
 		return (int)ret;
 }
 
-
-//test/example program
-int main(int argc, char *argv[])
-{
-	//seed the random number generator
-	srand(time(NULL));
-
-	//create a new userID to store locally.
-	cheddaUser *user=chedda_create_user("charlie");
-	printf("user %s\nUID %s\n",user->nickname,user->UID );	
+//set scores on specific board:
+//	-WARNING! 	- no error checking! Make sure you have correctly set the
+//							- g_chedda_API_key and g_chedda_game_ID variables.
+//							- you will need to free returnData yourself				
+//	-boardID			- the boardid set in cheddaboards
+//	-user				- a cheddaUser struct with name and UID set.
+//  -score			- the score to set
+//	-streak			- the streak to set
+//  -returnData - a char buffer set to NULL. If the function is successful
+//				  			this will contain the response from cheddaboards.
+//
+//  returns 		- an int code provided by libcurl. see: https://curl.se/libcurl/c/libcurl-errors.html
+//			  				you should be testing for CURLE_OK before using the data set in the returnData param
+int chedda_submit_score_targeted(void *user,char *boardID,long score, int streak,char **returnData){
 	
-	//or...	
-	//if you have loaded the user details from a save file, use this function
-	//to create the cheddaUser struct from the existing data
+	struct cheddaUser *usr=(struct cheddaUser*)user;
 
-	// char *your_loaded_uid="dev_1781519789_4d6e35f6";
-	// char *your_loaded_nickname="Mr. Horse";
-	// cheddaUser *user=chedda_create_existing_user(your_loaded_uid,your_loaded_nickname);
-	// printf("user %s\nUID %s\n",user->nickname,user->UID );
+	CURLcode ret;
+	CURL *hnd;
+	struct __chedda_response chunk = {.memory = malloc(0),
+                           			.size = 0};
+	struct curl_slist *slist1;
 
-	
-	
-	//boardName should match the name of the board you entered on cheddaboards
-	//e.g. daily, weekly, all-time etc.
-	char *boardName="flippyflip";
-	char *data=NULL;	
-	//send a request for scores on the board boardName. 	
-	int ret=chedda_get_scores(boardName,100,&data);
-	if(ret==CURLE_OK){
-		printf("recieved scores:\n");
-		printf("%s\n",data );
-		printf("make sure to parse for errors. looks like chedda boards will say \"ok:false\" if there is something wrong\n");
-		printf("you can now parse the json string and add the results to your game! woohoo!\n");
-	}else{
-		printf("oops! there was an error recieving scores.\n");
-		printf("error: %s\n",(char*)curl_easy_strerror(ret) );
-		
-	};	
+	char apiString[128];
+  	strcpy(apiString,"X-API-Key: ");
+  	strcat(apiString,g_chedda_API_key);
 
-	//set a score
-	char *result=NULL;
-	int set=chedda_submit_score(user,1234567,3,&result);
-	if(set==CURLE_OK){
-		printf("score sent!\n");
-		printf("%s\n", result);
-		printf("remember to check the result string in case there is an error returned by cheddaboards\n");
-	}else{
-		printf("oops! there was an error sending the score :(\n");
-		printf("error: %s\n",(char*)curl_easy_strerror(set) );
+  	char gameIDString[128];
+  	strcpy(gameIDString,"X-Game-ID: ");
+  	strcat(gameIDString,g_chedda_game_ID);
 
-	}
+  	char scoreStr[25];
+  	snprintf(scoreStr,25,"%ld",score);
 
-	//free memory assigned to the cheddaUser
-	chedda_user_free(user);
-	//free memory assigned by set/get score funtions
-	if(data!=NULL)
-		free(data);
+  	char streakStr[25];
+  	snprintf(streakStr,25,"%d",streak);
 
-	if(result!=NULL)
-		free(result);
+  	char *postString=(char*)malloc(sizeof(char)*2048);;
+		strcpy(postString,"{\"playerId\": \"");
+		strcat(postString,usr->UID);
+		strcat(postString,"\", \"scoreboardId\": \"");
+		strcat(postString,boardID);
+		strcat(postString,"\", \"gameId\": \"");
+		strcat(postString,g_chedda_game_ID);
+		strcat(postString,"\", \"nickname\": \"");
+		strcat(postString,usr->nickname);
+		strcat(postString,"\", \"score\": ");
+		strcat(postString,scoreStr);
+		strcat(postString,", \"streak\": ");
+		strcat(postString,streakStr);
+		strcat(postString,"}");
 
-	return 0;
+		//printf("%s\n",postString );
 
+		slist1 = NULL;
+		slist1 = curl_slist_append(slist1, apiString);
+		slist1 = curl_slist_append(slist1, g_chedda_game_ID);
+		slist1 = curl_slist_append(slist1, "Content-Type: application/json");
+
+		hnd = curl_easy_init();
+		curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
+		curl_easy_setopt(hnd, CURLOPT_URL, "https://api.cheddaboards.com/scores");
+		curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
+		//make sure to get the length of the string correct, or cheddaboards
+		//complains about invalid json strings.
+		curl_easy_setopt(hnd, CURLOPT_POSTFIELDSIZE_LARGE, strlen(postString));
+		curl_easy_setopt(hnd, CURLOPT_POSTFIELDS, postString);
+		curl_easy_setopt(hnd, CURLOPT_HTTPHEADER, slist1);
+		curl_easy_setopt(hnd, CURLOPT_USERAGENT, "curl/8.18.0");
+		curl_easy_setopt(hnd, CURLOPT_MAXREDIRS, 50L);
+		curl_easy_setopt(hnd, CURLOPT_SSLVERSION, (long)CURL_SSLVERSION_TLSv1_2);
+		curl_easy_setopt(hnd, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_easy_setopt(hnd, CURLOPT_TCP_KEEPALIVE, 1L);
+		curl_easy_setopt(hnd, CURLOPT_WRITEFUNCTION, __chedda_response_cb);
+		curl_easy_setopt(hnd, CURLOPT_WRITEDATA,(void*)&chunk);
+
+		ret = curl_easy_perform(hnd);
+
+		curl_easy_cleanup(hnd);
+		hnd = NULL;
+		curl_slist_free_all(slist1);
+		slist1 = NULL;
+		free(postString);
+
+		*returnData=strdup(chunk.memory);
+		  free(chunk.memory);
+
+		return (int)ret;
 }
-/**** End of sample code ****/

@@ -1,5 +1,11 @@
 # C_cheddaboards
-a simple example for communicating with cheddabords using C - see https://cheddaboards.com/ and https://github.com/cheddatech/CheddaBoards-Godot for more info.
+a simple library for communicating with cheddabords using C - see https://cheddaboards.com/ and https://github.com/cheddatech/CheddaBoards-Godot for more info.
+
+# Building the library
+
+You can use the buildlibrary-static.sh script to build a static library. Alternatively you can use the buildlibrary-dynamic.sh script to build a dynamic library. It is likely you will need to change the permissions on these scripts to execute them i.e. chmod +x buildlibrary-xxxxx.sh
+
+The library will be output into either the build/static or build/dylib folder, move whichever on of these you wish to use onto your linker path to use the library. I'd recomment using the static library, as the library is very small.
 
 # How To:
 
@@ -7,17 +13,19 @@ Basic usage:
 
 1: create and account and set up a game and boards over at https://cheddaboards.com/ and have a read of the REST api docs here: https://github.com/cheddatech/CheddaBoards-Godot/blob/main/docs/quickstart-api.md
 
-2: copy and paste your API Key and game id into the chedda_API_key and chedda_game_ID strings in chedda.c
+2: install libcurl, either from your distros package manager or from https://curl.se/libcurl/
 
-3: create a user or load user details from a file. Use the functions chedda_create_user() or chedda_create_existing_user() for this.
+3: include cheddaboards.h in you source file and point your linker at the library.
 
-4: Set or get some scores! use the chedda_get_scores() and chedda_submit_score() functions for this. If they return successfully, you can parse the json data to check for errors from the server and populate your scoreboards.
+4: initialise the library by calling chedda_init(api_key,game_id);
 
-5: Free memory. Remember to free userdata returned by chedda_create_user()and chedda_create_existing_user() with chedda_user_free(). The returnData parameter in chedda_get_scores() and chedda_submit_score() also needs to be freed if it's not NULL after the function returns. See the example.
+5: Set or get some scores! use the chedda_get_scores() and chedda_submit_score_global() or chedda_submit_scores_targetted() functions for this. If they return successfully, you can parse the json data to check for errors from the server and populate your scoreboards.
+
+6: Free memory. Remember to free userdata returned by chedda_create_user()and chedda_create_existing_user() with chedda_user_free(). The returnData parameter in chedda_get_scores() and chedda_submit_score() also needs to be freed if it's not NULL after the function returns. Also remember to use chedda_free() when you finish using the library, or at exit. See the example in test.c.
 
 # Example
 
-See the main() function in chedda.c for a usage example. If you have libcurl installed you can use the included buildrun.sh script to compile and execute the example. You will likely need to use 'chmod +x buildrun.sh' first.
+See test.c for a usage example. You can use the buildrun.sh to compile both the library and the test file. You will likely need to use 'chmod +x buildrun.sh' first.
 
 # License
 

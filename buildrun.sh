@@ -1,4 +1,5 @@
 #! /bin/bash
 
-gcc chedda.c -o chedda -lcurl
-./chedda
+./buildlibrary-static.sh
+gcc test.c -Lbuild/static/ -lcheddaboards -lcurl -o test
+./test
