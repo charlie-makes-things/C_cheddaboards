@@ -5,7 +5,7 @@ a simple library for communicating with cheddabords using C - see https://chedda
 
 You can use the buildlibrary-static.sh script to build a static library. Alternatively you can use the buildlibrary-dynamic.sh script to build a dynamic library. It is likely you will need to change the permissions on these scripts to execute them i.e. chmod +x buildlibrary-xxxxx.sh
 
-The library will be output into either the build/static or build/dylib folder, move whichever on of these you wish to use onto your linker path to use the library. I'd recomment using the static library, as the library is very small.
+The library will be output into either the build/static or build/dylib folder, move whichever on of these you wish to use onto your linker path to use the library. I'd recommend using the static library, as the library is very small.
 
 # How To:
 
@@ -17,7 +17,7 @@ Basic usage:
 
 3: include cheddaboards.h in you source file and point your linker at the library.
 
-4: initialise the library by calling chedda_init(api_key,game_id);
+4: initialize the library by calling chedda_init(api_key,game_id);
 
 5: Set or get some scores! use the chedda_get_scores() and chedda_submit_score_global() or chedda_submit_scores_targetted() functions for this. If they return successfully, you can parse the json data to check for errors from the server and populate your scoreboards.
 
@@ -25,7 +25,7 @@ Basic usage:
 
 # Example
 
-See test.c for a usage example. You can use the buildrun.sh to compile both the library and the test file. You will likely need to use 'chmod +x buildrun.sh' first.
+See test.c for a usage example. You can use the buildrun-xxx.sh to compile both the library and the test file either statically or dynamically. You will likely need to use 'chmod +x buildrun-xxx.sh' first.
 
 # License
 

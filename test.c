@@ -5,17 +5,14 @@ int main(int argc, char const *argv[])
 {
 	/* code */
 
-
-	printf("cheddaboard library test\n");
-
-	printf("initialise library...\n");
-
+	//set your api key and game ids
 	char *api_key="your_api_key_here";
 	char *game_id="your_game_id_here";
 
+	//initialize cheddaboards.
 	chedda_init(api_key,game_id);
 
-	printf("create user...\n");	
+	//create a new user. 
 	void *user=chedda_create_user("Ronald");
 	if(user!=NULL){
 		printf("user created\n");
@@ -24,7 +21,10 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 
-	printf("creating existing user\n");
+
+	//if you are loading a userid and nickname from file, you can use
+	//the following instead of the above.
+
 	// char *your_loaded_uid="dev_1781519789_4d6e35f6";
 	// char *your_loaded_nickname="Mr. Horse";
 	// void *existing_user=chedda_create_existing_user(your_loaded_uid,your_loaded_nickname);
@@ -35,6 +35,8 @@ int main(int argc, char const *argv[])
 	// 	return 1;
 	// }
 
+
+	//get some scores
 	char *boardName="your-board-id-here";
 	char *data=NULL;	
 	//send a request for scores on the board boardName. 	
@@ -52,7 +54,7 @@ int main(int argc, char const *argv[])
 	if(data!=NULL)
 		free(data);
 
-	//set a score
+	//set a score on the global board
 	data=NULL;
 	int set=chedda_submit_score_global(user,1234567,3,&data);
 	if(set==CURLE_OK){
@@ -67,6 +69,7 @@ int main(int argc, char const *argv[])
 	if(data!=NULL)
 		free(data);
 
+	//set a score on a targetted board
 	char *targetBoard="your-board-id-here";
 	data=NULL;
 	int settrgt=chedda_submit_score_targeted(user,targetBoard,1245,4,&data);
@@ -83,10 +86,11 @@ int main(int argc, char const *argv[])
 		free(data);
 
 
-	printf("free user\n");
+	//free userdata
 	if(user!=NULL)
 		chedda_user_free(user);
-	printf("free library\n");
+	
+	//free cheddaboards
 	chedda_free();
 
 
