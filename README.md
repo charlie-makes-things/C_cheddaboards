@@ -7,6 +7,8 @@ You can use the buildlibrary-static.sh script to build a static library. Alterna
 
 The library will be output into either the build/static or build/dylib folder, move whichever on of these you wish to use onto your linker path to use the library. I'd recommend using the static library, as the library is very small.
 
+Note that this has only been tested with GCC. You will likely need to make hanges if you use anther compiler.
+
 # How To:
 
 Basic usage:
