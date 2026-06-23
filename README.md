@@ -13,7 +13,7 @@ Note that this has only been tested with GCC. You will likely need to make chang
 
 Basic usage:
 
-1: create and account and set up a game and boards over at https://cheddaboards.com/ and have a read of the REST api docs here: https://github.com/cheddatech/CheddaBoards-Godot/blob/main/docs/quickstart-api.md
+1: create an account and set up a game and boards over at https://cheddaboards.com/ and have a read of the REST api docs here: https://github.com/cheddatech/CheddaBoards-Godot/blob/main/docs/quickstart-api.md
 
 2: install libcurl, either from your distros package manager or from https://curl.se/libcurl/
 
