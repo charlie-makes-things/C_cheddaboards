@@ -7,4 +7,3 @@
 *.[oa]
 *.so
 build/*
-/test
