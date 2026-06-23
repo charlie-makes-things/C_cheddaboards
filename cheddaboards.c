@@ -130,11 +130,13 @@ void chedda_user_free(void *user){
 
 
 extern char *chedda_get_user_id(void *user){
-
+	cheddaUser *usr=(cheddaUser*)user;
+	return usr->UID;
 }
 
 extern char *chedda_get_user_nickname(void *user){
-
+	cheddaUser *usr=(cheddaUser*)user;
+	return usr->nickname;
 }
 
 //get scores:
