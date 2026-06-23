@@ -10,8 +10,8 @@ int main(int argc, char const *argv[])
 
 	printf("initialise library...\n");
 
-	char *api_key="cb_sos_109755744";
-	char *game_id="sos";
+	char *api_key="your_api_key_here";
+	char *game_id="your_game_id_here";
 
 	chedda_init(api_key,game_id);
 
@@ -25,17 +25,17 @@ int main(int argc, char const *argv[])
 	}
 
 	printf("creating existing user\n");
-	char *your_loaded_uid="dev_1781519789_4d6e35f6";
-	char *your_loaded_nickname="Mr. Horse";
-	void *existing_user=chedda_create_existing_user(your_loaded_uid,your_loaded_nickname);
-	if(existing_user!=NULL){
-		printf("existing_user created\n");
-	}else{
-		printf("existing_user not created. error\n");
-		return 1;
-	}
+	// char *your_loaded_uid="dev_1781519789_4d6e35f6";
+	// char *your_loaded_nickname="Mr. Horse";
+	// void *existing_user=chedda_create_existing_user(your_loaded_uid,your_loaded_nickname);
+	// if(existing_user!=NULL){
+	// 	printf("existing_user created\n");
+	// }else{
+	// 	printf("existing_user not created. error\n");
+	// 	return 1;
+	// }
 
-	char *boardName="sos-gentlestart";
+	char *boardName="your-board-id-here";
 	char *data=NULL;	
 	//send a request for scores on the board boardName. 	
 	int ret=chedda_get_scores(boardName,100,&data);
@@ -67,7 +67,7 @@ int main(int argc, char const *argv[])
 	if(data!=NULL)
 		free(data);
 
-	char *targetBoard="sos-gentlestart";
+	char *targetBoard="your-board-id-here";
 	data=NULL;
 	int settrgt=chedda_submit_score_targeted(user,targetBoard,1245,4,&data);
 	if(settrgt==CURLE_OK){
