@@ -38,3 +38,5 @@ This is provided for free with no license, do with it as you wish though it woul
 This is a pretty barebones example. I have no plans to expand the code beyond what is here, though if you expand it I'd be happy to include your additions here.
 
 libcurl functions can take a long time to complete, so you will likely want to call the chedda_get_scores() and chedda_submit_score() functions from their own threads. This is beyond the scope of this example.
+
+This library does not parse json data for you. You will need to do this for yourself.
