@@ -1,4 +1,4 @@
 *.[oa]
 *.so
 build/*
-test
+/test
