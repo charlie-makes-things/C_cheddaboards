@@ -3,11 +3,21 @@ a simple library for communicating with cheddabords using C - see https://chedda
 
 # Building the library
 
+Linux:
+
 You can use the buildlibrary-static.sh script to build a static library. Alternatively you can use the buildlibrary-dynamic.sh script to build a dynamic library. It is likely you will need to change the permissions on these scripts to execute them i.e. chmod +x buildlibrary-xxxxx.sh
 
 The library will be output into either the build/static or build/dylib folder, move whichever on of these you wish to use onto your linker path to use the library. I'd recommend using the static library, as the library is very small.
 
 Note that this has only been tested with GCC. You will likely need to make changes if you use anther compiler.
+
+Windows:
+
+I use Windows very little. The windows build script runs on Linux and will compile a static library you can link with minGW. If you write a Windows native script, please let me know and I'll add it here. 
+
+Mac OS:
+
+The mac script outputs a .dylib file you can use with MacOS apps. You will need to run this script on a mac for it to work.
 
 # How To:
 
